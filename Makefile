@@ -19,4 +19,8 @@ lint:
 publish:
 	npm publish
 
+# Обновить локально
+update:
+	npm link
+
 .PHONY: test
