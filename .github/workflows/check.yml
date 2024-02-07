@@ -4,6 +4,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - run: npm i
+        uses: actions/checkout@v4
+      - run: make install
       - run: make lint
       - run: make test
