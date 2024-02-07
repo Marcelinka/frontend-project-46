@@ -1,7 +1,7 @@
 import gendiff from '../src/main.js';
 
 describe('gendiff', () => {
-  test('should compare two plain json files', () => {
+  test('should compare two plain files', () => {
     const result = `{
   - follow: false
     host: hexlet.io
@@ -12,5 +12,6 @@ describe('gendiff', () => {
 }`;
 
     expect(gendiff('./__fixtures__/file1.json', './__fixtures__/file2.json')).toEqual(result);
+    expect(gendiff('./__fixtures__/file1.yaml', './__fixtures__/file2.yaml')).toEqual(result);
   });
 });

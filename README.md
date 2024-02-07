@@ -6,3 +6,7 @@
 #### Шаг 4: Сравнение плоских файлов
 
 [![asciicast](https://asciinema.org/a/NVT0FOM3bh9nZYynXXu1TfXkG.svg)](https://asciinema.org/a/NVT0FOM3bh9nZYynXXu1TfXkG)
+
+#### Шаг 6: Сравнение плоских файлов (yaml)
+
+[![asciicast](https://asciinema.org/a/jJKCCXxYBJNEWhWMEGJsZksWy.svg)](https://asciinema.org/a/jJKCCXxYBJNEWhWMEGJsZksWy)
