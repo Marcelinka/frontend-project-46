@@ -2,7 +2,7 @@
   "name": "@hexlet/code",
   "version": "1.0.0",
   "description": "[![Actions Status](https://github.com/Marcelinka/frontend-project-46/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/Marcelinka/frontend-project-46/actions)",
-  "main": "index.js",
+  "main": "src/main.js",
   "bin": {
     "gendiff": "bin/gendiff.js"
   },
@@ -29,6 +29,7 @@
   "dependencies": {
     "commander": "^12.0.0",
     "debug": "^4.3.4",
+    "js-yaml": "^4.1.0",
     "lodash": "^4.17.21"
   },
   "devDependencies": {
