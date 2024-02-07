@@ -4,6 +4,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - run: npx simple-git-hooks
+      - run: npm i
       - run: make lint
       - run: make test
