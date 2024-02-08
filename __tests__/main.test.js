@@ -63,5 +63,6 @@ describe('gendiff', () => {
 }`;
 
     expect(gendiff('./__fixtures__/file3.json', './__fixtures__/file4.json')).toEqual(result);
+    expect(gendiff('./__fixtures__/file3.yaml', './__fixtures__/file4.yaml')).toEqual(result);
   });
 });
