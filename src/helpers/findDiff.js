@@ -1,7 +1,8 @@
 import sortBy from 'lodash/sortBy.js';
 import union from 'lodash/union.js';
-import has from 'lodash/has.js';
 import isObject from 'lodash/isObject.js';
+import intersection from 'lodash/intersection.js';
+import difference from 'lodash/difference.js';
 
 export default function findDiff(obj1, obj2, offset = 4) {
   const obj1Keys = Object.keys(obj1);
@@ -9,51 +10,44 @@ export default function findDiff(obj1, obj2, offset = 4) {
 
   const unionKeys = sortBy(union(obj1Keys, obj2Keys));
 
+  const intersectKeys = intersection(obj1Keys, obj2Keys);
+  const firstDiff = difference(obj1Keys, obj2Keys);
+
+  const hasInBoth = (key) => intersectKeys.includes(key);
+  const hasOnlyInFirst = (key) => firstDiff.includes(key);
+
+  const getPlainVal = (obj, key) => (
+    isObject(obj[key])
+      ? findDiff(obj[key], obj[key], offset + 4)
+      : obj[key]
+  );
+
+  const getStr = (key, val, sign = ' ') => `${' '.repeat(offset - 2)}${sign} ${key}: ${val}\n`;
+
   const result = ['{\n'];
 
   result.push(
     ...unionKeys.map((key) => {
-      let str = '';
-
-      if (isObject(obj1[key]) || isObject(obj2[key])) {
+      if (hasInBoth(key)) {
         if (isObject(obj1[key]) && isObject(obj2[key])) {
-          str += `${' '.repeat(offset)}${key}: ${findDiff(obj1[key], obj2[key], offset + 4)}\n`;
-          return str;
+          return getStr(key, findDiff(obj1[key], obj2[key], offset + 4));
         }
 
-        if (isObject(obj1[key]) && has(obj2, key)) {
-          str += `${' '.repeat(offset - 2)}- ${key}: ${findDiff(obj1[key], obj1[key], offset + 4)}\n`;
-          str += `${' '.repeat(offset - 2)}+ ${key}: ${obj2[key]}\n`;
-          return str;
+        if (obj1[key] !== obj2[key]) {
+          const firstVal = getPlainVal(obj1, key);
+          const secondVal = getPlainVal(obj2, key);
+
+          return getStr(key, firstVal, '-') + getStr(key, secondVal, '+');
         }
 
-        if (has(obj1, key) && isObject(obj2[key])) {
-          str += `${' '.repeat(offset - 2)}- ${key}: ${obj1[key]}\n`;
-          str += `${' '.repeat(offset - 2)}+ ${key}: ${findDiff(obj2[key], obj2[key], offset + 4)}\n`;
-          return str;
-        }
-
-        if (has(obj1, key)) {
-          str += `${' '.repeat(offset - 2)}- ${key}: ${findDiff(obj1[key], obj1[key], offset + 4)}\n`;
-          return str;
-        }
-
-        return `${' '.repeat(offset - 2)}+ ${key}: ${findDiff(obj2[key], obj2[key], offset + 4)}\n`;
+        return getStr(key, obj1[key]);
       }
 
-      if (obj1[key] !== obj2[key]) {
-        if (has(obj1, key)) {
-          str += `${' '.repeat(offset - 2)}- ${key}: ${obj1[key]}\n`;
-        }
-
-        if (has(obj2, key)) {
-          str += `${' '.repeat(offset - 2)}+ ${key}: ${obj2[key]}\n`;
-        }
-
-        return str;
+      if (hasOnlyInFirst(key)) {
+        return getStr(key, getPlainVal(obj1, key), '-');
       }
 
-      return `${' '.repeat(offset)}${key}: ${obj1[key]}\n`;
+      return getStr(key, getPlainVal(obj2, key), '+');
     }),
   );
 
