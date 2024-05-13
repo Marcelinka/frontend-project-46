@@ -1,9 +1,6 @@
 import parseFile from './helpers/parseFile.js';
-import findDiff from './helpers/findDiff.js';
-import * as stylishHelpers from './helpers/stylish.js';
-
 import getDiff from './helpers/getDiff.js';
-import stylish from './formatters/stylish.js';
+import formatDiff from './formatters/index.js';
 
 /**
  * Возвращает строку с результатом сравнения двух файлов в зависимости от формата
@@ -18,6 +15,5 @@ export default function gendiff(filepath1, filepath2, format = 'stylish') {
   const file2 = parseFile(filepath2);
 
   const diff = getDiff(file1, file2);
-  console.log(stylish(diff));
-  // return findDiff(stylishHelpers, file1, file2);
+  console.log(formatDiff(diff, format));
 }

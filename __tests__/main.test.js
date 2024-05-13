@@ -16,6 +16,17 @@ describe('gendiff', () => {
     expect(gendiff('./__fixtures__/file1.yaml', './__fixtures__/file2.yaml')).toEqual(result);
   });
 
+  test('should compare two plain files with plain structure', () => {
+    const result = `Property 'timeout' was updated. From 50 to 20
+Property 'proxy' was removed
+Property 'follow' was removed
+Property 'verbose' was added with value: true
+`;
+
+    expect(gendiff('./__fixtures__/file1.json', './__fixtures__/file2.json', 'plain')).toEqual(result);
+    expect(gendiff('./__fixtures__/file1.yaml', './__fixtures__/file2.yaml', 'plain')).toEqual(result);
+  });
+
   test('should compare two files with complex structure', () => {
     const result = `{
     common: {
