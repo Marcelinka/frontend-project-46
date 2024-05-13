@@ -3,8 +3,8 @@
  * @property {string} key - ключ объекта
  * @property {'removed' | 'added' | 'updated' | 'unchanged'} diffType - тип изменения
  * @property {'value' | 'nested'} propertyType - тип свойства
- * @property {*} [oldValue] - старое значение (только если propertyType = value и diffType != added)
- * @property {*} [newValue] - новое значение (только если propertyType = value и diffType != removed)
+ * @property {*} [oldValue] - старое значение только если propertyType = value и diffType != added
+ * @property {*} [newValue] - новое значение только если propertyType = value и diffType != removed
  * @property {DiffElement[]} [children] - дети (только если propertyType = nested)
  */
 
