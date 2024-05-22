@@ -15,5 +15,6 @@ export default function gendiff(filepath1, filepath2, format = 'stylish') {
   const file2 = parseFile(filepath2);
 
   const diff = getDiff(file1, file2);
-  console.log(formatDiff(diff, format));
+
+  return formatDiff(diff, format);
 }
