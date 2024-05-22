@@ -1,12 +1,64 @@
+import _ from 'lodash';
+
 /**
  * @typedef {object} DiffElement
  * @property {string} key - ключ объекта
- * @property {'removed' | 'added' | 'updated' | 'unchanged'} diffType - тип изменения
+ * @property {'removed' | 'added' | 'updated' | 'equal'} diffType - тип изменения
  * @property {'value' | 'nested'} propertyType - тип свойства
  * @property {*} [oldValue] - старое значение только если propertyType = value и diffType != added
  * @property {*} [newValue] - новое значение только если propertyType = value и diffType != removed
  * @property {DiffElement[]} [children] - дети (только если propertyType = nested)
  */
+
+/**
+ * @param {object} a
+ * @param {object} b
+ *
+ * @returns {DiffElement}
+ */
+const checkObjectValues = (a, b) => {
+  if (_.isEqual(a, b)) {
+    return {
+      diffType: 'equal',
+      propertyType: 'value',
+      oldValue: a,
+      newValue: b,
+    };
+  }
+
+  return {
+    diffType: 'updated',
+    propertyType: 'nested',
+  };
+};
+
+/**
+ * Только один из параметров может быть объектом
+ *
+ * @param {object | string | number | boolean} a
+ * @param {object | string | number | boolean} b
+ *
+ * @returns {DiffElement}
+ */
+const checkPlainValues = (a, b) => {
+  const elem = {
+    propertyType: 'value',
+    oldValue: a,
+    newValue: b,
+  };
+
+  if (a === b) {
+    elem.diffType = 'equal';
+  } else if (a === undefined) {
+    elem.diffType = 'added';
+  } else if (b === undefined) {
+    elem.diffType = 'removed';
+  } else {
+    elem.diffType = 'updated';
+  }
+
+  return elem;
+};
 
 /**
  * Создание структуры с разницей от a к b между двумя объектами
@@ -23,41 +75,19 @@ export default function getDiff(a, b) {
   const keys = [...new Set([...keysFrom, ...keysTo])];
 
   const diff = keys.map((key) => {
-    if (a[key] === b[key]) {
-      return {
-        key,
-        diffType: 'unchanged',
-        propertyType: 'value',
-        oldValue: a[key],
-        newValue: b[key],
-      };
+    const res = { key };
+
+    if (_.isObject(a[key]) && _.isObject(b[key])) {
+      _.merge(res, checkObjectValues(a[key], b[key]));
+
+      if (res.propertyType === 'nested') {
+        res.children = getDiff(a[key], b[key]);
+      }
+    } else {
+      _.merge(res, checkPlainValues(a[key], b[key]));
     }
 
-    if (a[key] === undefined) {
-      return {
-        key,
-        diffType: 'added',
-        propertyType: 'value',
-        newValue: b[key],
-      };
-    }
-
-    if (b[key] === undefined) {
-      return {
-        key,
-        diffType: 'removed',
-        propertyType: 'value',
-        oldValue: a[key],
-      };
-    }
-
-    return {
-      key,
-      diffType: 'updated',
-      propertyType: 'value',
-      oldValue: a[key],
-      newValue: b[key],
-    };
+    return res;
   });
 
   return diff;

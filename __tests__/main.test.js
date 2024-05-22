@@ -30,22 +30,22 @@ Property 'verbose' was added with value: true
   test('should compare two files with complex structure', () => {
     const result = `{
     common: {
-      + follow: false
         setting1: Value 1
       - setting2: 200
       - setting3: true
       + setting3: null
-      + setting4: blah blah
-      + setting5: {
-            key5: value5
-        }
         setting6: {
+            key: value
             doge: {
               - wow: 
               + wow: so much
             }
-            key: value
           + ops: vops
+        }
+      + follow: false
+      + setting4: blah blah
+      + setting5: {
+            key5: value5
         }
     }
     group1: {
