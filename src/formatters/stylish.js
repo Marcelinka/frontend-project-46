@@ -5,13 +5,10 @@ import _ from 'lodash';
  */
 
 const printObject = (obj, tabSize) => {
-  const rows = ['{'];
+  const middleRows = _.toPairs(obj)
+    .map(([key, value]) => `${_.repeat(' ', tabSize)}${key}: ${_.isObject(value) ? printObject(value, tabSize + 4) : value}`);
 
-  _.forEach(obj, (value, key) => {
-    rows.push(`${_.repeat(' ', tabSize)}${key}: ${_.isObject(value) ? printObject(value, tabSize + 4) : value}`);
-  });
-
-  rows.push(`${_.repeat(' ', tabSize - 4)}}`);
+  const rows = ['{'].concat(middleRows, [`${_.repeat(' ', tabSize - 4)}}`]);
 
   return rows.join('\n');
 };
@@ -24,6 +21,12 @@ const getValue = (value, tabSize) => {
   return value;
 };
 
+const getRemovedString = (element, tabSize) => `${_.padStart('- ', tabSize)}${element.key}: ${getValue(element.oldValue, tabSize)}`;
+
+const getAddedString = (element, tabSize) => `${_.padStart('+ ', tabSize)}${element.key}: ${getValue(element.newValue, tabSize)}`;
+
+const getEqualString = (element, tabSize) => `${_.repeat(' ', tabSize)}${element.key}: ${getValue(element.oldValue, tabSize)}`;
+
 /**
  * Возвращает строку с результатом сравнения одного элемента в формате stylish
  *
@@ -31,19 +34,19 @@ const getValue = (value, tabSize) => {
  * @returns {string} результат сравнения
  */
 const getElementString = (element, tabSize) => {
-  const rows = [];
-
-  if (['removed', 'updated'].includes(element.diffType)) {
-    rows.push(`${_.padStart('- ', tabSize)}${element.key}: ${getValue(element.oldValue, tabSize)}`);
-  }
-  if (['added', 'updated'].includes(element.diffType)) {
-    rows.push(`${_.padStart('+ ', tabSize)}${element.key}: ${getValue(element.newValue, tabSize)}`);
-  }
-  if (element.diffType === 'equal') {
-    rows.push(`${_.repeat(' ', tabSize)}${element.key}: ${getValue(element.oldValue, tabSize)}`);
+  if (element.diffType === 'removed') {
+    return getRemovedString(element, tabSize);
   }
 
-  return rows.join('\n');
+  if (element.diffType === 'added') {
+    return getAddedString(element, tabSize);
+  }
+
+  if (element.diffType === 'updated') {
+    return `${getRemovedString(element, tabSize)}\n${getAddedString(element, tabSize)}`;
+  }
+
+  return getEqualString(element, tabSize);
 };
 
 /**
@@ -53,17 +56,15 @@ const getElementString = (element, tabSize) => {
  * @returns {string} результат сравнения
  */
 export default function stylish(diff, tabSize = 4) {
-  const rows = ['{'];
-
-  diff.forEach((element) => {
+  const middleRows = diff.map((element) => {
     if (element.propertyType === 'nested') {
-      return rows.push(`${_.repeat(' ', tabSize)}${element.key}: ${stylish(element.children, tabSize + 4)}`);
+      return `${_.repeat(' ', tabSize)}${element.key}: ${stylish(element.children, tabSize + 4)}`;
     }
 
-    return rows.push(getElementString(element, tabSize));
+    return getElementString(element, tabSize);
   });
 
-  rows.push(`${_.repeat(' ', tabSize - 4)}}`);
+  const rows = ['{'].concat(middleRows, [`${_.repeat(' ', tabSize - 4)}}`]);
 
   return rows.join('\n');
 }
