@@ -73,6 +73,7 @@ export default function getDiff(a, b) {
   const keysTo = Object.keys(b);
 
   const keys = [...new Set([...keysFrom, ...keysTo])];
+  keys.sort();
 
   const diff = keys.map((key) => {
     const res = { key };

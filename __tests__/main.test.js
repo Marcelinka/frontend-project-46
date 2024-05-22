@@ -4,11 +4,11 @@ import gendiff from '../src/main.js';
 describe('gendiff', () => {
   test('should compare two plain files', () => {
     const result = `{
+  - follow: false
     host: hexlet.io
+  - proxy: 123.234.53.22
   - timeout: 50
   + timeout: 20
-  - proxy: 123.234.53.22
-  - follow: false
   + verbose: true
 }`;
 
@@ -17,9 +17,9 @@ describe('gendiff', () => {
   });
 
   test('should compare two plain files with plain format', () => {
-    const result = `Property 'timeout' was updated. From 50 to 20
+    const result = `Property 'follow' was removed
 Property 'proxy' was removed
-Property 'follow' was removed
+Property 'timeout' was updated. From 50 to 20
 Property 'verbose' was added with value: true`;
 
     expect(gendiff('./__fixtures__/file1.json', './__fixtures__/file2.json', 'plain')).toEqual(result);
@@ -29,18 +29,17 @@ Property 'verbose' was added with value: true`;
   test('should compare two plain files with json format', () => {
     const result = `[
     {
+        "key": "follow",
+        "propertyType": "value",
+        "oldValue": false,
+        "diffType": "removed"
+    },
+    {
         "key": "host",
         "propertyType": "value",
         "oldValue": "hexlet.io",
         "newValue": "hexlet.io",
         "diffType": "equal"
-    },
-    {
-        "key": "timeout",
-        "propertyType": "value",
-        "oldValue": 50,
-        "newValue": 20,
-        "diffType": "updated"
     },
     {
         "key": "proxy",
@@ -49,10 +48,11 @@ Property 'verbose' was added with value: true`;
         "diffType": "removed"
     },
     {
-        "key": "follow",
+        "key": "timeout",
         "propertyType": "value",
-        "oldValue": false,
-        "diffType": "removed"
+        "oldValue": 50,
+        "newValue": 20,
+        "diffType": "updated"
     },
     {
         "key": "verbose",
@@ -69,22 +69,22 @@ Property 'verbose' was added with value: true`;
   test('should compare two files with complex structure', () => {
     const result = `{
     common: {
+      + follow: false
         setting1: Value 1
       - setting2: 200
       - setting3: true
       + setting3: null
+      + setting4: blah blah
+      + setting5: {
+            key5: value5
+        }
         setting6: {
-            key: value
             doge: {
               - wow: 
               + wow: so much
             }
+            key: value
           + ops: vops
-        }
-      + follow: false
-      + setting4: blah blah
-      + setting5: {
-            key5: value5
         }
     }
     group1: {
@@ -117,13 +117,13 @@ Property 'verbose' was added with value: true`;
   });
 
   test('should compare two files with complex structure with plain format', () => {
-    const result = `Property 'common.setting2' was removed
+    const result = `Property 'common.follow' was added with value: false
+Property 'common.setting2' was removed
 Property 'common.setting3' was updated. From true to null
-Property 'common.setting6.doge.wow' was updated. From '' to 'so much'
-Property 'common.setting6.ops' was added with value: 'vops'
-Property 'common.follow' was added with value: false
 Property 'common.setting4' was added with value: 'blah blah'
 Property 'common.setting5' was added with value: [complex value]
+Property 'common.setting6.doge.wow' was updated. From '' to 'so much'
+Property 'common.setting6.ops' was added with value: 'vops'
 Property 'group1.baz' was updated. From 'bas' to 'bars'
 Property 'group1.nest' was updated. From [complex value] to 'str'
 Property 'group2' was removed
@@ -140,6 +140,12 @@ Property 'group3' was added with value: [complex value]`;
         "diffType": "updated",
         "propertyType": "nested",
         "children": [
+            {
+                "key": "follow",
+                "propertyType": "value",
+                "newValue": false,
+                "diffType": "added"
+            },
             {
                 "key": "setting1",
                 "propertyType": "value",
@@ -161,17 +167,24 @@ Property 'group3' was added with value: [complex value]`;
                 "diffType": "updated"
             },
             {
+                "key": "setting4",
+                "propertyType": "value",
+                "newValue": "blah blah",
+                "diffType": "added"
+            },
+            {
+                "key": "setting5",
+                "propertyType": "value",
+                "newValue": {
+                    "key5": "value5"
+                },
+                "diffType": "added"
+            },
+            {
                 "key": "setting6",
                 "diffType": "updated",
                 "propertyType": "nested",
                 "children": [
-                    {
-                        "key": "key",
-                        "propertyType": "value",
-                        "oldValue": "value",
-                        "newValue": "value",
-                        "diffType": "equal"
-                    },
                     {
                         "key": "doge",
                         "diffType": "updated",
@@ -187,32 +200,19 @@ Property 'group3' was added with value: [complex value]`;
                         ]
                     },
                     {
+                        "key": "key",
+                        "propertyType": "value",
+                        "oldValue": "value",
+                        "newValue": "value",
+                        "diffType": "equal"
+                    },
+                    {
                         "key": "ops",
                         "propertyType": "value",
                         "newValue": "vops",
                         "diffType": "added"
                     }
                 ]
-            },
-            {
-                "key": "follow",
-                "propertyType": "value",
-                "newValue": false,
-                "diffType": "added"
-            },
-            {
-                "key": "setting4",
-                "propertyType": "value",
-                "newValue": "blah blah",
-                "diffType": "added"
-            },
-            {
-                "key": "setting5",
-                "propertyType": "value",
-                "newValue": {
-                    "key5": "value5"
-                },
-                "diffType": "added"
             }
         ]
     },
