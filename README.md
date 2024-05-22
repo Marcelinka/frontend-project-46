@@ -18,3 +18,7 @@
 #### Шаг 8: Плоский формат
 
 [![asciicast](https://asciinema.org/a/0ONfeetvuDqE7JiyjixniuZ4e.svg)](https://asciinema.org/a/0ONfeetvuDqE7JiyjixniuZ4e)
+
+#### Шаг 9: Вывод в json
+
+[![asciicast](https://asciinema.org/a/VCHtjAxKo6A98X3XTMezLFQIw.svg)](https://asciinema.org/a/VCHtjAxKo6A98X3XTMezLFQIw)
