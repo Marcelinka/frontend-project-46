@@ -83,7 +83,7 @@ export default function getDiff(a, b) {
       _.merge(res, checkObjectValues(a[key], b[key]));
 
       if (res.propertyType === 'nested') {
-        res.children = getDiff(a[key], b[key]);
+        _.merge(res, { children: getDiff(a[key], b[key]) });
       }
     } else {
       _.merge(res, checkPlainValues(a[key], b[key]));
