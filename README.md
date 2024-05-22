@@ -14,3 +14,7 @@
 #### Шаг 7: Рекурсивное сравнение
 
 [![asciicast](https://asciinema.org/a/AgdpMbNbAJzVJBRN0Ob7H5Zo8.svg)](https://asciinema.org/a/AgdpMbNbAJzVJBRN0Ob7H5Zo8)
+
+#### Шаг 8: Плоский формат
+
+[![asciicast](https://asciinema.org/a/0ONfeetvuDqE7JiyjixniuZ4e.svg)](https://asciinema.org/a/0ONfeetvuDqE7JiyjixniuZ4e)
