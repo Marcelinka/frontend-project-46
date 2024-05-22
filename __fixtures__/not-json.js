@@ -1,3 +1,4 @@
+/* eslint-disable fp/no-mutation */
 module.exports = {
   host: 'hexlet.io',
   timeout: 50,

@@ -41,23 +41,25 @@ const checkObjectValues = (a, b) => {
  * @returns {DiffElement}
  */
 const checkPlainValues = (a, b) => {
-  const elem = {
+  const baseElem = {
     propertyType: 'value',
     oldValue: a,
     newValue: b,
   };
 
   if (a === b) {
-    elem.diffType = 'equal';
-  } else if (a === undefined) {
-    elem.diffType = 'added';
-  } else if (b === undefined) {
-    elem.diffType = 'removed';
-  } else {
-    elem.diffType = 'updated';
+    return { diffType: 'equal', ...baseElem };
   }
 
-  return elem;
+  if (a === undefined) {
+    return { diffType: 'added', ...baseElem };
+  }
+
+  if (b === undefined) {
+    return { diffType: 'removed', ...baseElem };
+  }
+
+  return { diffType: 'updated', ...baseElem };
 };
 
 /**
@@ -72,8 +74,7 @@ export default function getDiff(a, b) {
   const keysFrom = Object.keys(a);
   const keysTo = Object.keys(b);
 
-  const keys = [...new Set([...keysFrom, ...keysTo])];
-  keys.sort();
+  const keys = [...new Set([...keysFrom, ...keysTo])].sort();
 
   const diff = keys.map((key) => {
     const res = { key };

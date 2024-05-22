@@ -30,35 +30,35 @@ Property 'verbose' was added with value: true`;
     const result = `[
     {
         "key": "follow",
+        "diffType": "removed",
         "propertyType": "value",
-        "oldValue": false,
-        "diffType": "removed"
+        "oldValue": false
     },
     {
         "key": "host",
+        "diffType": "equal",
         "propertyType": "value",
         "oldValue": "hexlet.io",
-        "newValue": "hexlet.io",
-        "diffType": "equal"
+        "newValue": "hexlet.io"
     },
     {
         "key": "proxy",
+        "diffType": "removed",
         "propertyType": "value",
-        "oldValue": "123.234.53.22",
-        "diffType": "removed"
+        "oldValue": "123.234.53.22"
     },
     {
         "key": "timeout",
+        "diffType": "updated",
         "propertyType": "value",
         "oldValue": 50,
-        "newValue": 20,
-        "diffType": "updated"
+        "newValue": 20
     },
     {
         "key": "verbose",
+        "diffType": "added",
         "propertyType": "value",
-        "newValue": true,
-        "diffType": "added"
+        "newValue": true
     }
 ]`;
 
@@ -142,43 +142,43 @@ Property 'group3' was added with value: [complex value]`;
         "children": [
             {
                 "key": "follow",
+                "diffType": "added",
                 "propertyType": "value",
-                "newValue": false,
-                "diffType": "added"
+                "newValue": false
             },
             {
                 "key": "setting1",
+                "diffType": "equal",
                 "propertyType": "value",
                 "oldValue": "Value 1",
-                "newValue": "Value 1",
-                "diffType": "equal"
+                "newValue": "Value 1"
             },
             {
                 "key": "setting2",
+                "diffType": "removed",
                 "propertyType": "value",
-                "oldValue": 200,
-                "diffType": "removed"
+                "oldValue": 200
             },
             {
                 "key": "setting3",
+                "diffType": "updated",
                 "propertyType": "value",
                 "oldValue": true,
-                "newValue": null,
-                "diffType": "updated"
+                "newValue": null
             },
             {
                 "key": "setting4",
+                "diffType": "added",
                 "propertyType": "value",
-                "newValue": "blah blah",
-                "diffType": "added"
+                "newValue": "blah blah"
             },
             {
                 "key": "setting5",
+                "diffType": "added",
                 "propertyType": "value",
                 "newValue": {
                     "key5": "value5"
-                },
-                "diffType": "added"
+                }
             },
             {
                 "key": "setting6",
@@ -192,25 +192,25 @@ Property 'group3' was added with value: [complex value]`;
                         "children": [
                             {
                                 "key": "wow",
+                                "diffType": "updated",
                                 "propertyType": "value",
                                 "oldValue": "",
-                                "newValue": "so much",
-                                "diffType": "updated"
+                                "newValue": "so much"
                             }
                         ]
                     },
                     {
                         "key": "key",
+                        "diffType": "equal",
                         "propertyType": "value",
                         "oldValue": "value",
-                        "newValue": "value",
-                        "diffType": "equal"
+                        "newValue": "value"
                     },
                     {
                         "key": "ops",
+                        "diffType": "added",
                         "propertyType": "value",
-                        "newValue": "vops",
-                        "diffType": "added"
+                        "newValue": "vops"
                     }
                 ]
             }
@@ -223,42 +223,43 @@ Property 'group3' was added with value: [complex value]`;
         "children": [
             {
                 "key": "baz",
+                "diffType": "updated",
                 "propertyType": "value",
                 "oldValue": "bas",
-                "newValue": "bars",
-                "diffType": "updated"
+                "newValue": "bars"
             },
             {
                 "key": "foo",
+                "diffType": "equal",
                 "propertyType": "value",
                 "oldValue": "bar",
-                "newValue": "bar",
-                "diffType": "equal"
+                "newValue": "bar"
             },
             {
                 "key": "nest",
+                "diffType": "updated",
                 "propertyType": "value",
                 "oldValue": {
                     "key": "value"
                 },
-                "newValue": "str",
-                "diffType": "updated"
+                "newValue": "str"
             }
         ]
     },
     {
         "key": "group2",
+        "diffType": "removed",
         "propertyType": "value",
         "oldValue": {
             "abc": 12345,
             "deep": {
                 "id": 45
             }
-        },
-        "diffType": "removed"
+        }
     },
     {
         "key": "group3",
+        "diffType": "added",
         "propertyType": "value",
         "newValue": {
             "deep": {
@@ -267,8 +268,7 @@ Property 'group3' was added with value: [complex value]`;
                 }
             },
             "fee": 100500
-        },
-        "diffType": "added"
+        }
     }
 ]`;
 

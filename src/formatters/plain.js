@@ -23,21 +23,27 @@ const getValue = (value) => {
  * @returns {string} результат сравнения
  */
 export default function plain(diff, prefix = '') {
-  let result = '';
-
-  diff.forEach((element) => {
+  const rows = diff.map((element) => {
     if (element.diffType === 'added') {
-      result += `Property '${prefix}${element.key}' was added with value: ${getValue(element.newValue)}\n`;
-    } else if (element.diffType === 'removed') {
-      result += `Property '${prefix}${element.key}' was removed\n`;
-    } else if (element.diffType === 'updated') {
-      if (element.propertyType === 'value') {
-        result += `Property '${prefix}${element.key}' was updated. From ${getValue(element.oldValue)} to ${getValue(element.newValue)}\n`;
-      } else {
-        result += plain(element.children, `${prefix}${element.key}.`);
-      }
+      return `Property '${prefix}${element.key}' was added with value: ${getValue(element.newValue)}`;
     }
+
+    if (element.diffType === 'removed') {
+      return `Property '${prefix}${element.key}' was removed`;
+    }
+
+    if (element.diffType === 'updated') {
+      if (element.propertyType === 'value') {
+        return `Property '${prefix}${element.key}' was updated. From ${getValue(element.oldValue)} to ${getValue(element.newValue)}`;
+      }
+
+      return plain(element.children, `${prefix}${element.key}.`);
+    }
+
+    return null;
   });
 
-  return prefix === '' ? _.trimEnd(result) : result;
+  return rows
+    .filter((el) => Boolean(el))
+    .join('\n');
 }

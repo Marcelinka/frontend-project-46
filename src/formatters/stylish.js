@@ -5,15 +5,15 @@ import _ from 'lodash';
  */
 
 const printObject = (obj, tabSize) => {
-  let result = '{\n';
+  const rows = ['{'];
 
   _.forEach(obj, (value, key) => {
-    result += `${_.repeat(' ', tabSize)}${key}: ${_.isObject(value) ? printObject(value, tabSize + 4) : value}\n`;
+    rows.push(`${_.repeat(' ', tabSize)}${key}: ${_.isObject(value) ? printObject(value, tabSize + 4) : value}`);
   });
 
-  result += `${_.repeat(' ', tabSize - 4)}}`;
+  rows.push(`${_.repeat(' ', tabSize - 4)}}`);
 
-  return result;
+  return rows.join('\n');
 };
 
 const getValue = (value, tabSize) => {
@@ -31,19 +31,19 @@ const getValue = (value, tabSize) => {
  * @returns {string} результат сравнения
  */
 const getElementString = (element, tabSize) => {
-  let str = '';
+  const rows = [];
 
   if (['removed', 'updated'].includes(element.diffType)) {
-    str += `${_.padStart('- ', tabSize)}${element.key}: ${getValue(element.oldValue, tabSize)}\n`;
+    rows.push(`${_.padStart('- ', tabSize)}${element.key}: ${getValue(element.oldValue, tabSize)}`);
   }
   if (['added', 'updated'].includes(element.diffType)) {
-    str += `${_.padStart('+ ', tabSize)}${element.key}: ${getValue(element.newValue, tabSize)}\n`;
+    rows.push(`${_.padStart('+ ', tabSize)}${element.key}: ${getValue(element.newValue, tabSize)}`);
   }
   if (element.diffType === 'equal') {
-    str += `${_.repeat(' ', tabSize)}${element.key}: ${getValue(element.oldValue, tabSize)}\n`;
+    rows.push(`${_.repeat(' ', tabSize)}${element.key}: ${getValue(element.oldValue, tabSize)}`);
   }
 
-  return str;
+  return rows.join('\n');
 };
 
 /**
@@ -53,17 +53,17 @@ const getElementString = (element, tabSize) => {
  * @returns {string} результат сравнения
  */
 export default function stylish(diff, tabSize = 4) {
-  let result = '{\n';
+  const rows = ['{'];
 
   diff.forEach((element) => {
     if (element.propertyType === 'nested') {
-      result += `${_.repeat(' ', tabSize)}${element.key}: ${stylish(element.children, tabSize + 4)}\n`;
-    } else {
-      result += getElementString(element, tabSize);
+      return rows.push(`${_.repeat(' ', tabSize)}${element.key}: ${stylish(element.children, tabSize + 4)}`);
     }
+
+    return rows.push(getElementString(element, tabSize));
   });
 
-  result += `${_.repeat(' ', tabSize - 4)}}`;
+  rows.push(`${_.repeat(' ', tabSize - 4)}}`);
 
-  return result;
+  return rows.join('\n');
 }
